@@ -1,0 +1,11 @@
+#corpo{
+    padding: 20px;
+}
+
+#cardProdutos{
+    cursor: pointer;
+}
+
+#cardEntradaSaida{
+    cursor: pointer;
+}

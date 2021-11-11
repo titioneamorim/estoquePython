@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+{% include 'partials/messages.html' %}
+
+    {% if not valido and valido is not None%}
+        <div class="alert alert-danger">
+            <strong> {{ mensagem }} </strong>
+        </div>
+    {% endif %}
+
+    <h2> Adicionar produto </h2>
+
+
+    <form method="POST" action="{% url 'adiciona_produto'%}">     
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" value="{{request.POST.nome}}" name="nome" class="form-control" id="nome" aria-describedby="emailHelp">
+    </div>
+    <div class="form-group">
+        <label for="nome">Código</label>
+        <input type="text" value="{{request.POST.codigo}}" name="codigo" class="form-control" id="codigo" aria-describedby="emailHelp">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+
+    </form>
+
+{% endblock container %}

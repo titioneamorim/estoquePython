@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+
+
+{% block container %}
+
+{% include 'partials/messages.html' %} 
+
+     <div style="justify-content:center; align-items:center; display:flex; margin-bottom:15px;">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Pesquisa" aria-label="Search" name="termo" value="{{ request.GET.termo }}">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        Pesquisar
+                    </button>
+                </form>
+                    
+                    {% comment %} {% url 'tela_adiciona_historico' %} {% endcomment %}
+                <form class="form-inline my-2 my-lg-0" method="GET" action="">
+                    <button class="btn btn-outline-success my-2 my-sm-0" style="margin-left: 10px;" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Adicionar
+                    </button>
+                </form>
+
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">Data de entrada</th>
+            <th scope="col">Funcionário</th>
+            <th scope="col">Tipo do produto</th>
+            <th scope="col">Código do produto</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Descrição</th>
+    
+            </tr>
+        </thead>
+
+       {% for hist in historicos %}
+       
+            <tr>
+                <td>{{ hist.data_entrada }}</td>
+                <td>{{ hist.funcionario }}</td>
+                <td>{{ hist.tipo }}</td>
+                <td>{{ hist.produto_id.codigo }}</td>
+                <td>{{ hist.quantidade }}</td>
+                <td>{{ hist.descricao }}</td>
+            </tr>
+       {% endfor %}
+
+    </table>
+
+    <nav aria-label="...">
+    <ul class="pagination">
+        {% for pagina in historicos.paginator.page_range %}
+            {% if historicos.number == pagina %}
+                <li class="page-item active">
+                <a class="page-link" href="?p={{pagina}}&termo={{request.GET.termo}}">{{pagina}}</a>
+                </li> 
+
+            {% else %}
+                <li class="page-item">
+                <a class="page-link" href="?p={{pagina}}&termo={{request.GET.termo}}">{{pagina}}</a>
+                </li>
+
+            {% endif %} 
+
+        {% endfor %}
+    </ul>
+
+  </nav>
+
+
+    <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+        
+        <div class="modal-header">
+            <h4 class="modal-title">Adicionar movimentação</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+       
+        <div class="modal-body">
+    <form method="POST" action="{% url 'adiciona_historico'%}">
+    {% csrf_token %}
+        <div class="form-group row">
+            <label for="funcionario" class="col-4 col-form-label">Funcionário</label> 
+            <div class="col-8">
+            <input id="funcionario" value="{{request.POST.funcionario}}"  name="funcionario" placeholder="Nome do funcionário" type="text" class="form-control">
+            </div>
+        </div>
+
+         <div class="form-group row">
+            <label for="produto_id" class="col-4 col-form-label">Produto</label> 
+                <div class="col-8">
+                    <select id="produto_id" name="produto_id" class="custom-select">
+                        <option value=""></option>
+                        {% for produto in produtos %}
+                            <option value={{produto.id}}>{{produto.nome}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+        </div> 
+
+        <div class="form-group row">
+            <label for="tipo" class="col-4 col-form-label">Tipo</label> 
+            <div class="col-8">
+                <select id="tipo" name="tipo" class="custom-select">
+                    <option value=""></option>
+                    <option value="entrada">Entrada</option>
+                    <option value="saida">Saída</option>
+            </select>
+            </div>
+        </div>     
+        
+        <div class="form-group row">
+            <label for="quantidade" class="col-4 col-form-label">Quantidade</label> 
+            <div class="col-8">
+            <input id="quantidade" value="{{request.POST.quantidade}}" name="quantidade" type="text"  placeholder="Quantidade de produto" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="descricao" class="col-4 col-form-label">Descrição</label> 
+            <div class="col-8">
+            <textarea id="descricao" value="{{request.POST.descricao}}"  name="descricao" cols="40" rows="5" placeholder="Descreva a movimentação" class="form-control"></textarea>
+            </div>
+        </div> 
+        <div class="form-group row">
+            <div class="offset-4 col-8" style="align-items:right;">
+            <button name="submit" type="submit" class="btn btn-primary">Salvar</button>
+        
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="margin-left:55px;" >Cancelar</button>
+        
+            </div>
+        </div>
+        </form>
+        </div>
+
+       
+
+        </div>
+    </div>
+    </div>
+
+
+    
+{% endblock container %}
