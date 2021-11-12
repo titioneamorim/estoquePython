@@ -1,6 +1,7 @@
 import uuid
 from .models import ProdutoModel
 from .serializers import ProdutoSerializer
+from django.db.models import Q, Value
 
 class ProdutoServices():
     
@@ -14,7 +15,7 @@ class ProdutoServices():
         return ProdutoModel.objects.filter(codigo=codigo).first()
 
     def buscar_produto_por_termo(self, termo:str) -> list[ProdutoModel]:
-        return ProdutoModel.objects.filter(nome=termo, codigo=termo);
+        return ProdutoModel.objects.filter( Q(nome__icontains=termo) | Q(codigo__icontains=termo))
         
     def remover_produto_by_id(self, id:uuid) -> int:
         return ProdutoModel.objects.filter(id=id).delete()

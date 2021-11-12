@@ -7,9 +7,11 @@
 {% include 'partials/messages.html' %}
 
     <div style="justify-content:center; align-items:center; display:flex; margin-bottom:15px;">
-                <form class="form-inline my-2 my-lg-0" method="GET" action="">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'consulta_produtos' %}">
                     <input class="form-control mr-sm-2" type="search" placeholder="Pesquisa" aria-label="Search" name="termo" value="{{ request.GET.termo }}">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                            Pesquisar
+                        </button>
                 </form>
                     
                 <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'tela_adiciona_produto' %}">

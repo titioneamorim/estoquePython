@@ -36,3 +36,12 @@ def adiciona_historico(request):
     serializer.save()
     messages.success(request,"Movimentação para o funcionário "+ request.POST.get('funcionario') +" salva com sucesso.")
     return HttpResponseRedirect('/historicos/')
+
+def consulta_historico(request):
+    termo = request.GET.get('termo')
+    page = request.GET.get('p')
+    historicos = _SERVICE.buscar_historico_by_termo(termo)
+    paginator = Paginator(historicos, 5)
+    historicos = paginator.get_page(page)
+    return render(request=request, template_name='home_historico.html', context={'historicos' : historicos})
+

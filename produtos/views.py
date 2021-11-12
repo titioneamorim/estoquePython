@@ -54,6 +54,12 @@ def adiciona_produto(request):
     messages.success(request,"Produto "+ request.POST.get('nome') +" salvo com sucesso.")
     return HttpResponseRedirect('/produtos/')
 
-# def busca_produto(request, termo:str):
+def busca_produto(request):
+    termo = request.GET.get('termo')
+    page = request.GET.get('p')
+    produtos = _SERVICE.buscar_produto_por_termo(termo)
+    paginator = Paginator(produtos, 5)
+    produtos = paginator.get_page(page)
+    return render(request=request, template_name='homeProdutos.html', context={'produtos' : produtos})
 
     
